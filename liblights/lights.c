@@ -236,6 +236,8 @@ set_trackball_light(struct light_state_t const* state)
     if (state->flashMode == LIGHT_FLASH_HARDWARE) {
         mode = state->flashOnMS;
         period = state->flashOffMS;
+        period = (period < 2)  ? 2  : period;
+        period = (period > 12) ? 12 : period;
     }
     LOGV("%s color=%08x mode=%d period %d\n", __func__,
         state->color, mode, period);
@@ -262,7 +264,7 @@ set_trackball_light(struct light_state_t const* state)
     }
     trackball_mode = mode;
 
-return write_int(&leds[JOGBALL_LED].brightness, mode);
+    return write_int(&leds[JOGBALL_LED].brightness, mode);
 }
 
 static void
